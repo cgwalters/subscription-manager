@@ -274,11 +274,10 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_password_entry.set_text("redhatPass")
         test_connection_button = self.nc.xml.get_widget("testConnectionButton")
         self.nc.on_test_connection_clicked(test_connection_button)
-        expected = 'args=(\'example.com\', \'10000\', \'redhatUser\', \'redhatPass\')'
+        expected = mock.call(args=('example.com', '10000', 'redhatUser', 'redhatPass'),
+                             name=mock.ANY, target=mock.ANY)
         actual = mock_thread.call_args_list
-        print actual
-        print "\n%s" % str(expected)
-        self.assertTrue(expected in x for x in actual)
+        self.assertTrue(expected in actual)
 
     @mock.patch('subscription_manager.gui.networkConfig.threading.Thread')
     def test_network_cfg_on_test_connection_clicked_no_auth(self, mock_thread):
@@ -292,8 +291,6 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_password_entry.set_text("redhatPass")
         test_connection_button = self.nc.xml.get_widget("testConnectionButton")
         self.nc.on_test_connection_clicked(test_connection_button)
-        expected = 'args=(\'example.com\', \'10000\', \'\', \'\')'
+        expected = mock.call(args=('example.com', '10000', None, None), name=mock.ANY, target=mock.ANY)
         actual = mock_thread.call_args_list
-        print actual
-        print "\n%s" % str(expected)
-        self.assertTrue(expected in x for x in actual)
+        self.assertTrue(expected in actual)
